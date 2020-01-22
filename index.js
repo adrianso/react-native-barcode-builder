@@ -13,18 +13,8 @@ export default class Barcode extends PureComponent {
     value: PropTypes.string,
     /* Select which barcode type to use */
     format: PropTypes.oneOf(Object.keys(barcodes)),
-    /* Overide the text that is diplayed */
-    text: PropTypes.string,
-    /* The width option is the width of a single bar. */
-    width: PropTypes.number,
-    /* The height of the barcode. */
-    height: PropTypes.number,
     /* Set the color of the bars */
     lineColor: PropTypes.string,
-    /* Set the color of the text. */
-    textColor: PropTypes.string,
-    /* Set the background of the barcode. */
-    background: PropTypes.string,
     /* Handle error for invalid barcode of selected format */
     onError: PropTypes.func
   };
@@ -33,11 +23,7 @@ export default class Barcode extends PureComponent {
     value: undefined,
     format: 'CODE128',
     text: undefined,
-    width: 2,
-    height: 100,
     lineColor: '#000000',
-    textColor: '#000000',
-    background: '#ffffff',
     onError: undefined
   };
 
@@ -69,11 +55,11 @@ export default class Barcode extends PureComponent {
 
     if (encoded) {
       this.state.bars = this.drawSvgBarCode(encoded, this.props);
-      this.state.barCodeWidth = encoded.data.length * this.props.width;
+      this.state.barCodeWidth = encoded.data.length;
     }
   }
 
-  drawSvgBarCode(encoding, options = {}) {
+  drawSvgBarCode(encoding) {
     const rects = [];
     // binary data of barcode
     const binary = encoding.data;
@@ -84,15 +70,15 @@ export default class Barcode extends PureComponent {
     // alert(JSON.stringify(options));
 
     for (let b = 0; b < binary.length; b++) {
-      x = b * options.width;
+      x = b;
       if (binary[b] === '1') {
         barWidth++;
       } else if (barWidth > 0) {
         rects[rects.length] = this.drawRect(
-          x - options.width * barWidth,
+          x - barWidth,
           yFrom,
-          options.width * barWidth,
-          options.height
+          barWidth,
+          100
         );
         barWidth = 0;
       }
@@ -101,10 +87,10 @@ export default class Barcode extends PureComponent {
     // Last draw is needed since the barcode ends with 1
     if (barWidth > 0) {
       rects[rects.length] = this.drawRect(
-        x - options.width * (barWidth - 1),
+        x - barWidth + 1,
         yFrom,
-        options.width * barWidth,
-        options.height
+        barWidth,
+        100
       );
     }
 
@@ -168,32 +154,20 @@ export default class Barcode extends PureComponent {
 
   render() {
     this.update();
-    const backgroundStyle = {
-      backgroundColor: this.props.background
-    };
     return (
-      <View style={[styles.svgContainer, backgroundStyle]}>
+      <View style={{width: "100%", height: "100%"}}>
         <Svg
-          height={this.props.height}
-          width={this.state.barCodeWidth}
+          height="100%"
+          width="100%"
+          viewBox={`0 0 ${this.state.barCodeWidth} 100`}
+          // width={200}
+          preserveAspectRatio="xMinYMin slice"
           fill={this.props.lineColor}>
           <Path
             d={this.state.bars.join(' ')}
           />
         </Svg>
-        {typeof (this.props.text) != 'undefined' &&
-          <Text style={{ color: this.props.textColor, width: this.state.barCodeWidth, textAlign: 'center' }} >
-            {this.props.text}
-          </Text>
-        }
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  svgContainer: {
-    alignItems: 'center',
-    padding: 10
-  }
-});
