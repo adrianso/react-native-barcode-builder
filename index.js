@@ -112,7 +112,6 @@ Barcode.defaultProps = {
   style: {},
   value: undefined,
   format: 'CODE128',
-  text: undefined,
   lineColor: '#000000',
   flat: false,
   onError: () => {},
