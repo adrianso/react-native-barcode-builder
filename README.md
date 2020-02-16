@@ -1,22 +1,23 @@
+# @adrianso/react-native-barcode-builder
 
-# react-native-barcode-builder
+React Native component to generate barcodes.
 
-React Native component to generate barcodes. Uses [JsBarcode](https://github.com/lindell/JsBarcode) for encoding of data.
+Uses [JsBarcode](https://github.com/lindell/JsBarcode) for encoding of data.
+
+Uses [@react-native-community/react-native-svg](https://github.com/react-native-community/react-native-svg) instead of [@react-native-community/art](https://github.com/react-native-community/art).
 
 ## Getting started
 
-This library uses [@react-native-community/react-native-svg](https://github.com/react-native-community/react-native-svg) instead of [@react-native-community/art](https://github.com/react-native-community/art)
-
 ### Step 1
 
-Install `react-native-barcode-builder`:
+Install `react-native-barcode-builder` and dependencies:
 
-    npm install react-native-barcode-builder --save
+    npm install react-native-barcode-builder react-native-svg
 
 or
 
-    yarn add react-native-barcode-builder
-  
+    yarn add react-native-barcode-builder react-native-svg
+
 ### Step 2
 
 Start using the component
@@ -24,7 +25,7 @@ Start using the component
 ```javascript
 import Barcode from 'react-native-barcode-builder';
 
-<Barcode value="Hello World" format="CODE128" />
+<Barcode value="Hello World" format="CODE128" />;
 ```
 
 You can find more info about the supported barcodes in the [JsBarcode README](https://github.com/lindell/JsBarcode#supported-barcodes).
