@@ -1,15 +1,16 @@
 {
   "name": "@adrianso/react-native-barcode-builder",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "",
   "repository": {
     "type": "git",
     "url": "https://github.com/adrianso/react-native-barcode-builder.git"
   },
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "eslint ./"
+    "lint": "eslint '**/*.{ts,tsx}'"
   },
   "keywords": [
     "react-native",
@@ -17,15 +18,24 @@
   ],
   "author": "Adrian So <adrian@sld.co.nz>",
   "dependencies": {
-    "jsbarcode": "^3.11.0",
-    "react-native-svg": "^11.0.1"
+    "jsbarcode": "^3.11.5"
   },
   "peerDependencies": {
-    "react-native-svg": ">= 11.0.1"
+    "react": ">=16.8.1",
+    "react-native": ">=0.60.0 <1.0.x",
+    "react-native-svg": ">= 13.2.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
-    "eslint": "^6.8.0",
-    "eslint-plugin-react": "^7.18.3"
+    "@babel/core": "^7.19.3",
+    "@types/react": "^18.0.21",
+    "@types/react-native": "^0.70.4",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/parser": "^5.39.0",
+    "eslint": "^8.24.0",
+    "eslint-plugin-react": "^7.31.8",
+    "react": "^18.2.0",
+    "react-native": "^0.70.1",
+    "react-native-svg": "^13.2.0",
+    "typescript": "^4.8.4"
   }
 }

@@ -1,12 +1,11 @@
 // @flow
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { StyleProp, View, ViewStyle } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-
 import barcodes from 'jsbarcode/src/barcodes';
 
 // encode() handles the Encoder call and builds the binary string to be rendered
-const encode = (text, Encoder, options) => {
+const encode = (text: string, Encoder: any, options: BarcodeOptions) => {
   // If text is not a non-empty string, throw error.
   if (typeof text !== 'string' || text.length === 0) {
     throw new Error('Barcode value must be a non-empty string');
@@ -35,8 +34,8 @@ const encode = (text, Encoder, options) => {
   return encoded;
 };
 
-const drawSvgBarCode = encoding => {
-  const rects = [];
+const drawSvgBarCode = (encoding: any) => {
+  const rects = [] as string[];
   // binary data of barcode
   const binary = encoding.data;
 
@@ -62,23 +61,53 @@ const drawSvgBarCode = encoding => {
   return rects;
 };
 
-const drawRect = (x, y, width, height) => {
+const drawRect = (x: number, y: number, width: number, height: number) => {
   return `M${x},${y}h${width}v${height}h-${width}z`;
 };
 
-type Props = {|
-  +style: Object,
-  +value: string,
-  +format: string,
-  +lineColor: string,
-  +flat: boolean,
-  +onError: Function,
-|};
+type BarcodeFormat =
+  | 'CODE39'
+  | 'CODE128'
+  | 'CODE128A'
+  | 'CODE128B'
+  | 'CODE128C'
+  | 'EAN13'
+  | 'EAN8'
+  | 'EAN5'
+  | 'EAN2'
+  | 'UPC'
+  | 'UPCE'
+  | 'ITF14'
+  | 'ITF'
+  | 'MSI'
+  | 'MSI10'
+  | 'MSI11'
+  | 'MSI1010'
+  | 'MSI1110'
+  | 'pharmacode'
+  | 'codabar'
+  | 'GenericBarcode';
+
+interface BarcodeOptions {
+  format?: BarcodeFormat;
+  lineColor?: string;
+  flat?: boolean;
+  value: string;
+}
+
+interface Props extends BarcodeOptions {
+  style: StyleProp<ViewStyle>;
+}
 
 const Barcode = (props: Props) => {
-  const { format, value, lineColor, flat } = props;
+  const {
+    format = 'CODE128',
+    value,
+    lineColor = '#000000',
+    flat = false,
+  } = props;
   const { style, ...barcodeProps } = props;
-  const [bars, setBars] = useState([]);
+  const [bars, setBars] = useState<string[]>([]);
   const [barCodeWidth, setBarCodeWidth] = useState(0);
 
   useEffect(() => {
@@ -107,12 +136,3 @@ const Barcode = (props: Props) => {
 };
 
 export default Barcode;
-
-Barcode.defaultProps = {
-  style: {},
-  value: undefined,
-  format: 'CODE128',
-  lineColor: '#000000',
-  flat: false,
-  onError: () => {},
-};
