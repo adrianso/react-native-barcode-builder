@@ -1,15 +1,16 @@
 {
   "name": "@adrianso/react-native-barcode-builder",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "",
   "repository": {
     "type": "git",
     "url": "https://github.com/adrianso/react-native-barcode-builder.git"
   },
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
+    "prepublish": "tsc",
     "lint": "eslint '**/*.{ts,tsx}'"
   },
   "keywords": [
