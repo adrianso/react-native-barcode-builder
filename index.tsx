@@ -93,11 +93,34 @@ interface BarcodeOptions {
   lineColor?: string;
   flat?: boolean;
   value: string;
+  width?: number;
+  height?: number;
 }
 
 interface Props extends BarcodeOptions {
   style: StyleProp<ViewStyle>;
 }
+
+export const barcodeToSvg = (options: BarcodeOptions) => {
+  const {
+    format = 'CODE128',
+    lineColor = '#000000',
+    value,
+    width = 100,
+    height = 100,
+  } = options;
+  const encoder = barcodes[format];
+  const encoded = encode(value, encoder, options);
+
+  const bars = drawSvgBarCode(encoded);
+  const barCodeWidth = encoded.data.length;
+
+  return `
+      <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${barCodeWidth} 100" preserveAspectRatio="xMinYMin slice">
+        <path d="${bars.join(' ')}" fill="${lineColor}"/>
+      </svg>
+    `;
+};
 
 const Barcode = (props: Props) => {
   const {
