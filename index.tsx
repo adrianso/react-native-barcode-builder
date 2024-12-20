@@ -1,8 +1,8 @@
 // @flow
 import React, { useState, useEffect } from 'react';
-import { StyleProp, View, ViewStyle } from 'react-native';
+import { View, ViewProps } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import barcodes from 'jsbarcode/src/barcodes';
+import barcodeEncoders from 'jsbarcode/src/barcodes';
 
 // encode() handles the Encoder call and builds the binary string to be rendered
 const encode = (text: string, Encoder: any, options: BarcodeOptions) => {
@@ -97,9 +97,7 @@ interface BarcodeOptions {
   height?: number;
 }
 
-interface Props extends BarcodeOptions {
-  style: StyleProp<ViewStyle>;
-}
+interface Props extends BarcodeOptions, ViewProps {}
 
 export const barcodeToSvg = (options: BarcodeOptions) => {
   const {
@@ -109,7 +107,7 @@ export const barcodeToSvg = (options: BarcodeOptions) => {
     width = 100,
     height = 100,
   } = options;
-  const encoder = barcodes[format];
+  const encoder = barcodeEncoders[format];
   const encoded = encode(value, encoder, options);
 
   const bars = drawSvgBarCode(encoded);
@@ -125,26 +123,35 @@ export const barcodeToSvg = (options: BarcodeOptions) => {
 const Barcode = (props: Props) => {
   const {
     format = 'CODE128',
-    value,
     lineColor = '#000000',
     flat = false,
+    value,
+    width,
+    height,
+    ...viewProps
   } = props;
-  const { style, ...barcodeProps } = props;
   const [bars, setBars] = useState<string[]>([]);
   const [barCodeWidth, setBarCodeWidth] = useState(0);
 
   useEffect(() => {
-    const encoder = barcodes[format];
-    const encoded = encode(value, encoder, barcodeProps);
+    const encoder = barcodeEncoders[format];
+    const encoded = encode(value, encoder, {
+      format,
+      lineColor,
+      flat,
+      value,
+      width,
+      height,
+    });
 
     if (encoded) {
       setBars(drawSvgBarCode(encoded));
       setBarCodeWidth(encoded.data.length);
     }
-  }, [format, value, lineColor, flat]);
+  }, [format, value, lineColor, flat, width, height]);
 
   return (
-    <View style={style}>
+    <View {...viewProps}>
       <Svg
         height="100%"
         width="100%"
